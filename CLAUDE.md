@@ -15,15 +15,13 @@ There is no test suite.
 
 ## Architecture
 
-This is a single-page React app (Vite + React 19). All logic lives in one file: `src/App.jsx`.
+Single-page React app (Vite + React 19), split into four components:
 
-**State** is managed with `useState` in the top-level `App` component:
-- `transactions` — array of `{ id, description, amount, type, category, date }`. Amounts are stored as **strings** (not numbers), which causes the broken summary totals visible in the UI — `reduce` concatenates strings instead of summing them.
-- Form state: `description`, `amount`, `type`, `category`
-- Filter state: `filterType`, `filterCategory`
+- **`App`** — holds the `transactions` state (`{ id, description, amount, type, category, date }`). Passes data and callbacks down; contains no UI of its own beyond the page shell.
+- **`Summary`** — receives `transactions`, computes `totalIncome`, `totalExpenses`, and `balance` internally, renders the three summary cards.
+- **`TransactionForm`** — owns its own form state (`description`, `amount`, `type`, `category`). Calls `onAdd(transaction)` prop on submit.
+- **`TransactionList`** — receives `transactions`, owns its own filter state (`filterType`, `filterCategory`), renders the filtered table.
 
-**Known intentional bugs** (this is a course starter project meant to be fixed):
-- `amount` is stored and reduced as a string → summary totals are wrong (string concatenation instead of numeric addition)
-- "Freelance Work" is typed `income` in description but stored as `type: "expense"` in seed data
-- No delete functionality
-- Minimal styling
+The `categories` constant is duplicated in `TransactionForm` and `TransactionList` — a shared constants file doesn't exist yet.
+
+**Known intentional bug** (course starter project): "Freelance Work" seed entry is categorised as `type: "expense"` despite being income.
