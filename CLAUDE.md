@@ -17,10 +17,10 @@ There is no test suite.
 
 Single-page React app (Vite + React 19), split into four components:
 
-- **`App`** — holds the `transactions` state (`{ id, description, amount, type, category, date }`). Passes data and callbacks down; contains no UI of its own beyond the page shell.
+- **`App`** — holds the `transactions` state (`{ id, description, amount, type, category, date }`). Exposes `handleAdd` and `handleDelete` callbacks; passes them down as props; contains no UI of its own beyond the page shell.
 - **`Summary`** — receives `transactions`, computes `totalIncome`, `totalExpenses`, and `balance` internally, renders the three summary cards.
 - **`TransactionForm`** — owns its own form state (`description`, `amount`, `type`, `category`). Calls `onAdd(transaction)` prop on submit.
-- **`TransactionList`** — receives `transactions`, owns its own filter state (`filterType`, `filterCategory`), renders the filtered table.
+- **`TransactionList`** — receives `transactions` and `onDelete`, owns its own filter state (`filterType`, `filterCategory`), renders the filtered table with a delete button per row (uses `window.confirm` before calling `onDelete`).
 
 The `categories` constant is duplicated in `TransactionForm` and `TransactionList` — a shared constants file doesn't exist yet.
 
